@@ -1,137 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Pet Care and Rescue - Adopt, Volunteer, Donate, and Care for Pets in Need">
-  <title>Pet Care & Rescue</title>
-  <link rel="stylesheet" href="styles.css">
-  <script src="pets.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Platform</title>
+    <link rel="stylesheet" href="teacherstudent.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="navbar">
     <div class="container">
-      <div class="logo">Pet Care & Rescue</div>
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="adopt.html">Adopt</a></li>
-        <li><a href="services.html">Services</a></li>
-        <li><a href="rescue.html">Rescue</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="donate.html">Donate</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-  </nav>
+        <div id="welcome-screen" class="screen">
+            <h1>Quiz Platform</h1>
+            <div class="button-group">
+                <button onclick="showTeacherPanel()">Teacher</button>
+                <button onclick="showStudentPanel()">Student</button>
+            </div>
+        </div>
 
-  <!-- Hero Section -->
-  <section class="hero" id="home">
-    <div class="carousel">
-      <div class="carousel-inner"></div>
-      <button class="carousel-btn prev">&lt;</button>
-      <button class="carousel-btn next">&gt;</button>
-    </div>
-  </section>
+        <div id="teacher-panel" class="screen hidden">             
+            <h2>Create Quiz</h2>             
+            <form id="quiz-form">                 
+                <div>
+                    <label><b>Description</b></label><br>
+                    <input type="text" id="text" name="text"><br><br>
+                </div>                 
+                <div id="questions-container"></div>                 
+                <button type="button" onclick="addQuestion()" class="secondary-button">Add Question</button>                 
+                <div class="form-group">                     
+                    <label>Time Limit (minutes):</label>
+                    <input type="number" id="time-limit" min="1" required>                 
+                </div>                 
+                <button type="submit" id="create-quiz-btn" style="display: none;">Create Quiz</button>             
+            </form>  
+        
+                      
+            <div id="share-link" class="hidden">
+                <h3>Share with students:</h3>
+                <div class="share-info">
+                    <div class="share-item">
+                        <h4>Quiz Link:</h4>
+                        <p id="quiz-link"></p>
+                    </div>
+                    <div class="share-item">
+                        <h4>Quiz Code:</h4>
+                        <p id="quiz-code-display"></p>
+                    </div>
+                </div>
+            </div>
+            <button onclick="showWelcomeScreen()">Back</button>
+        </div>
 
-  <!-- Services Section -->
-  <section class="services" id="services">
-    <div class="container">
-      <h2>Our Services</h2>
-      <div class="services-grid">
-        <div class="service-card">
-          <h3>Expert Veterinary Care</h3>
-          <p>Professional medical care for your pets with state-of-the-art facilities.</p>
+        <div id="student-panel" class="screen hidden">
+            <h2>Take Quiz</h2>
+            <div id="quiz-entry">
+                <input type="text" id="student-name" placeholder="Enter your name" required>
+                <input type="text" id="quiz-code" placeholder="Enter quiz code" required>
+                <button onclick="startQuiz()">Start Quiz</button>
+            </div>
+            <div id="quiz-area" class="hidden">
+                <div class="quiz-header">
+                    <div id="timer"></div>
+                    <div id="progress">Question <span id="current-question">1</span> of <span id="total-questions">0</span></div>
+                </div>
+                <div id="question-display"></div>
+                <div id="options-display"></div>
+                <div class="navigation-buttons">
+                    <button onclick="previousQuestion()" id="prev-button" class="secondary-button">Previous</button>
+                    <button onclick="nextQuestion()" id="next-button">Next</button>
+                    <button onclick="submitQuiz()" id="submit-button" class="hidden">Submit Quiz</button>
+                </div>
+            </div>
+            <button onclick="showWelcomeScreen()">Back</button>
         </div>
-        <div class="service-card">
-          <h3>Pet Grooming</h3>
-          <p>Comprehensive grooming services to keep your pets clean and healthy.</p>
-        </div>
-        <div class="service-card">
-          <h3>24/7 Emergency Care</h3>
-          <p>Round-the-clock emergency services for your peace of mind.</p>
-        </div>
-        <div class="service-card">
-          <h3>Pet Adoption</h3>
-          <p>Find your perfect companion from our rescue center.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Adoption Section -->
-  <section class="adoption" id="adopt">
-    <div class="container">
-      <h2>Featured Pets</h2>
-      <div class="pets-grid"></div>
+        <div id="leaderboard" class="screen hidden">
+            <h2>Leaderboard</h2>
+            <table id="rankings">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                        <th>Time</th>
+                        <th>Badges</th>
+                    </tr>
+                </thead>
+                <tbody id="rankings-body"></tbody>
+            </table>
+            <button onclick="showWelcomeScreen()">Back to Home</button>
+        </div>
     </div>
-  </section>
-
-  <!-- About Section -->
-  <section class="about" id="about">
-    <div class="container">
-      <div class="about-content">
-        <div class="about-text">
-          <h2>About Us</h2>
-          <p>We are dedicated to providing the highest quality care for your pets. Our team of experienced professionals ensures that every animal receives the attention and care they deserve.</p>
-          <ul class="features">
-            <li>Best In Industry</li>
-            <li>Emergency Services</li>
-            <li>24/7 Customer Support</li>
-          </ul>
-        </div>
-        <div class="about-images">
-          <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&q=80&w=500" alt="Pet care facility" class="main-image">
-          <div class="image-grid">
-            <img src="https://images.unsplash.com/photo-1587764379873-97837921fd44?auto=format&fit=crop&q=80&w=500" alt="Pet grooming">
-            <img src="https://images.unsplash.com/photo-1628009368231-7bb7cfcb0def?auto=format&fit=crop&q=80&w=500" alt="Veterinary care">
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <div class="footer-section">
-          <h3>About Us</h3>
-          <p>Dedicated to providing the best care for your beloved pets.</p>
-        </div>
-        <div class="footer-section">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#services">Services</a></li>
-            <li><a href="#adopt">Adopt</a></li>
-            <li><a href="rescue.html">Rescue</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Contact</h3>
-          <ul>
-            <li>123 Pet Street</li>
-            <li>New York, NY 10001</li>
-            <li>Phone: (555) 123-4567</li>
-            <li>Email: info@petcare.com</li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h3>Newsletter</h3>
-          <form class="newsletter-form">
-            <input type="email" placeholder="Your email">
-            <button type="submit">Subscribe</button>
-          </form>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2024 Pet Care & Rescue. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
 </body>
+<script src="teacherstudent.js"></script>
 </html>
